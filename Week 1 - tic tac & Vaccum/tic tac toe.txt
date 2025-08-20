@@ -1,0 +1,78 @@
+import random
+def win(board,char):
+  if(board[0]==board[1]==board[2]==char):
+    return True
+  elif(board[3]==board[4]==board[5]==char):
+    return True
+  elif(board[6]==board[7]==board[8]==char):
+    return True
+  elif(board[0]==board[3]==board[6]==char):
+    return True
+  elif(board[1]==board[4]==board[7]==char):
+    return True
+  elif(board[2]==board[5]==board[8]==char):
+    return True
+  elif(board[0]==board[4]==board[8]==char):
+    return True
+  elif(board[2]==board[4]==board[6]==char):
+    return True
+  else:
+    return False
+
+board = [""]*9
+
+while(1):
+  print(board[0], board[1], board[2])
+  print("---")
+  print()
+  print(board[3], board[4], board[5])
+  print("---")
+  print()
+  print(board[6], board[7], board[8])
+  print("---")
+
+
+  while(1):
+    user = int(input("Enter the cell to place an X: "))
+    if(user>=0 and user<9):
+      if(board[user]==""):
+        board[user] = 'x'
+        break
+  if(win(board,'x')):
+    print("User wins")
+    break
+  for i in board:
+    if(i==""):
+      val = 1
+      break
+    else:
+      val = 0
+  if(val==0):
+    print("Draw")
+    break
+
+  while(1):
+   ai = random.randint(0,9)
+   if(ai>=0 and ai<9):
+      if(board[ai]==""):
+        board[ai] = 'o'
+        break
+ 
+  if(win(board,'o')):
+    print("AI wins")
+    break
+  for i in board:
+    if(i==""):
+      val = 1
+      break
+    else:
+      val = 0
+  if(val==0):
+    print("Draw")
+    break
+  
+
+  
+
+    
+
