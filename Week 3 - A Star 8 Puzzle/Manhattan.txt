@@ -1,0 +1,72 @@
+
+from copy import deepcopy
+def findblank(state):
+    for i in range(3):
+        for j in range(3):
+            if state[i][j]==0:
+                return i,j
+def swap(state,i1,j1,i2,j2):
+    copy=deepcopy(state)
+    copy[i1][j1],copy[i2][j2]=copy[i2][j2],copy[i1][j1]
+    return copy
+def statetostring(state):
+    return ''.join(str(num) for row in state for num in row)
+def printstate(state):
+    for row in state: print(row)
+    print()
+def succ(state):
+    i,j=findblank(state)
+    s=[]
+    if i>0:
+        s.append(swap(state,i,j,i-1,j))
+    if i<2:
+        s.append(swap(state,i,j,i+1,j))
+    if j>0:
+        s.append(swap(state,i,j,i,j-1))
+    if j<2:
+        s.append(swap(state,i,j,i,j+1))
+    return s
+def misplaced(state,goal):
+    count=0
+    for i in range(3):
+       for j in range(3):
+            if state[i][j]!=0 and state[i][j]!=goal[i][j]:
+                count+=1
+    return count
+def manhattan(state,goal):
+    distance=0
+    pos={}
+    for i in range(3):
+        for j in range(3):
+            pos[goal[i][j]]=(i,j)
+    for i in range(3):
+        for j in range(3):
+            if state[i][j]!=0:
+                v=state[i][j]
+                x,y=pos[v]
+                distance+=abs(x-i)+abs(y-j)
+    return distance          
+def astar(start,goal,heuristic):
+    openlist=[(start,0,heuristic(start,goal))]
+    visited=set()
+    while openlist:
+        openlist.sort(key=lambda x:x[1]+x[2])
+        state,g,h=openlist.pop(0)
+        printstate(state)
+        if state==goal:
+            print("solution found"); return True
+        statestr=statetostring(state)
+        if statestr not in visited:
+            visited.add(statestr)
+            for s in succ(state):
+                openlist.append((s,g+1,heuristic(s,goal)))
+    print("no solution")
+    return False
+start=[]
+goal=[]
+print("enter start state:")
+for i in range(3): start.append(list(map(int,input().split())))
+print("enter goal state:")
+for j in range(3): goal.append(list(map(int,input().split())))
+print("Manhattan distance:")
+astar(start,goal,manhattan)

@@ -1,0 +1,121 @@
+import copy
+def printState(list):
+  for i in range(0,3):
+    for j in range(0,3):
+      print(list[i][j], end=" ")
+    print()
+
+def small(left,right,down,up):
+  if(left<=right and left<=down and left<=up):
+    return 0
+  elif(right<=left and right<=down and right<=up):
+    return 1
+  elif(up<=right and up<=down and up<=left):
+    return 2
+  elif(down<=right and down<=up and down<=left):
+    return 3
+
+goal = [[1,2,3],[8,0,4],[7,6,5]]
+initial = [[1,2,3],[8,6,4],[0,7,5]]
+row = -1;
+col = -1;
+flag=  False
+
+while(flag==False):
+
+  up = copy.deepcopy(initial)
+  down = copy.deepcopy(initial)
+  left = copy.deepcopy(initial)
+  right = copy.deepcopy(initial)
+
+  upf = 0
+  downf = 0
+  leftf = 0
+  rightf = 0
+  for i in range(0,3):
+    for j in range(0,3):
+      if(initial[i][j]==0):
+        row = i;
+        col = j
+        break;
+
+  if(row==0):
+    upFlag = False;
+    upf = -1
+  else:
+    upFlag = True
+
+  if(row==2):
+    downFlag = False;
+    downf= -1
+  else:
+    downFlag = True
+
+  if(col==0):
+    leftFlag = False;
+    leftf = -1
+  else:
+    leftFlag = True
+
+  if(col==2):
+    rightFlag = False;
+    rightf = -1
+  else:
+    rightFlag = True
+  
+  if(upFlag):
+    (up[row][col], up[row-1][col]) = (up[row-1][col], up[row][col])
+    for i in range(0,3):
+      for j in range(0,3):
+        if(up[i][j]!=goal[i][j]):
+          upf+=1
+
+  if(downFlag):
+    (down[row][col], down[row+1][col]) = (down[row+1][col], down[row][col])
+    for i in range(0,3):
+      for j in range(0,3):
+        if(down[i][j]!=goal[i][j]):
+          downf+=1
+        
+  if(leftFlag):
+    (left[row][col], left[row][col-1]) = (left[row][col-1], left[row][col])
+    for i in range(0,3):
+      for j in range(0,3):
+        if(left[i][j]!=goal[i][j]):
+          leftf+=1  
+
+  if(rightFlag):
+      (right[row][col], right[row][col+1]) = (right[row][col+1], right[row][col])
+      for i in range(0,3):
+        for j in range(0,3):
+          if(right[i][j]!=initial[i][j]):
+            rightf+=1
+
+  if upf==0:
+    print("Solution found:")
+    printState(up)
+    break
+  if downf==0:
+    print("Solution found:")
+    printState(down)
+    break
+  if leftf==0:
+    print("Solution found:")
+    printState(left)
+    break
+  if rightf==0:
+    print("Solution found:")
+    printState(right)
+    break
+  val = small(upf,downf,leftf,rightf)
+  if val==0:
+    initial = left
+  elif val==1:
+    initial = right
+  elif val==2:
+    initial = up
+  elif val==3:
+    initial = down
+  printState(initial)
+  
+
